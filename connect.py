@@ -15,6 +15,8 @@ class DB:
 
     def get_current_link_and_date(self,kurs):
         req = f'SELECT * from `last_edit` where `kurs`={str(kurs)} ORDER BY `date` DESC LIMIT 1;';
+        req = f'SELECT * from `last_edit` where `kurs`=%s ORDER BY `date` DESC LIMIT 1;'%str(kurs);
+
         self.cursor.execute(req)
         a = self.cursor.fetchone()
         a = (a[1],a[2]) if a is not None else (None, None)
@@ -27,7 +29,8 @@ class DB:
         date = datetime.strptime(date,' %d.%m.%Y %H:%M')
         l_link, l_date = self.get_current_link_and_date(kurs)
         if (l_date is None or l_link is None) or (date > l_date or link != l_link):
-            req = f'INSERT INTO `last_edit` (`date`,`link`,`kurs`) VALUES (\'{str(date)}\',\'{str(link)}\',{kurs});';
+            req = 'INSERT INTO `last_edit` (`date`,`link`,`kurs`) VALUES (\'%s\',\'%s\',%d);'%(str(date),str(link),kurs);
+
             self.cursor.execute(req)
             return True
 
@@ -80,5 +83,5 @@ class DB:
 
 if __name__ == '__main__':
     db = DB()
-    #db.update_link(" 01.09.2039 12:00","htttp://ssss",4)
+    #db.update_link(" 01.09.2039 12:00","htttp://ssss",3)
     print(db.get_current_link_and_date(3))
