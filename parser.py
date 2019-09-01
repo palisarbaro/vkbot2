@@ -38,4 +38,4 @@ for i in range(1,5):
     print(date,link)
     db = connect.DB()
     if db.update_link(date, link,i):
-        vk.send_to_all(f"курс {i}: {link}  от {date}.")
+        vk.send_to_all("курс %d: %s  от %s."%(i,link,date))
