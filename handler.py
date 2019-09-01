@@ -37,9 +37,6 @@ def action_get_week(user_id,real_msg):
     week = "верхняя" if get_week() else "нижняя"
     vk.send_to_one(user_id, week)
 
-print(get_week())
-exit(1)
-
 handler = Handler()
 handler.add_action(r"help",action_help)
 handler.add_action(r"get week", action_get_week)
