@@ -6,7 +6,7 @@ import re
 from math import floor
 
 def get_week():
-    first_monday = datetime.date(2018,9,3)
+    first_monday = datetime.date(2019,9,2)
     today = datetime.date.today()
     weeks_delta = (today - first_monday).days//7
     return weeks_delta%2==1
@@ -36,6 +36,9 @@ def action_get_link(user_id,real_msg):
 def action_get_week(user_id,real_msg):
     week = "верхняя" if get_week() else "нижняя"
     vk.send_to_one(user_id, week)
+
+print(get_week())
+exit(1)
 
 handler = Handler()
 handler.add_action(r"help",action_help)
