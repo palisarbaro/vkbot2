@@ -14,8 +14,7 @@ class DB:
         self.db.close()
 
     def get_current_link_and_date(self,kurs):
-        req = f'SELECT * from `last_edit` where `kurs`={str(kurs)} ORDER BY `date` DESC LIMIT 1;';
-        req = f'SELECT * from `last_edit` where `kurs`=%s ORDER BY `date` DESC LIMIT 1;'%str(kurs);
+        req = 'SELECT * from `last_edit` where `kurs`=%s ORDER BY `date` DESC LIMIT 1;'%str(kurs);
 
         self.cursor.execute(req)
         a = self.cursor.fetchone()
