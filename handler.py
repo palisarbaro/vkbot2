@@ -37,11 +37,14 @@ def action_get_week(user_id,real_msg):
     week = "верхняя" if get_week() else "нижняя"
     vk.send_to_one(user_id, week)
 
+def action_get_keyboard(user_id,real_msg):
+    vk.send_keyboard(user_id)
+
 handler = Handler()
 handler.add_action(r"help",action_help)
 handler.add_action(r"get week", action_get_week)
 handler.add_action(r"get link[1234]", action_get_link)
-
+handler.add_action(r"get keyboard",action_get_keyboard)
 while True:
     time.sleep(0.1)
     db = connect.DB()

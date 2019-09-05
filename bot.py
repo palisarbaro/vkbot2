@@ -29,6 +29,7 @@ class Handler:
 handler = Handler()
 handler.add_action(r"get link[1234]",lambda x:x)
 handler.add_action(r"get week",lambda x:"get week")
+handler.add_action(r"get keyboard",lambda x:"get keyboard")
 
 server = vk.get_long_poll_server()
 while True:

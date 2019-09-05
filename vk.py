@@ -12,8 +12,10 @@ token = top_secret.token
 version = "5.0"
 hello_msg = """get link3  - получить последнюю ссылку для 3 курса
 get week - верхняя или нижняя неделя
+get keyboard - получить кнопки
 """
-hello = "Привет, я буду уведомлять тебя о выходе нового расписания (но это не точно)\n P.S. Теперь работают кнопки"
+
+
 
 def debug(f):
     def g(*args,**kwargs):
@@ -31,20 +33,22 @@ def send_to_one(user_id, message):
     url = send_url + create_url(user_id=user_id,message=message)
     resp = urllib.request.urlopen(url)
 
-def send_hello(user_id):
-    message_send(user_id=user_id, message=hello, keyboard=get_keyboard('keyboard'))
 
-def message_send(**param):
-    url = send_url + create_url(**param)
-    resp = urllib.request.urlopen(url)
+def send_hello(user_id):
+    send_to_one(user_id, hello_msg)
 
 def get_keyboard(fname):
     with open(fname, 'r') as file:
         kboard = file.read().replace('\n', '')
     return kboard
-    
+
+def send_keyboard(user_id):
+    url = send_url + create_url(user_id=user_id,message="...",keyboard=get_keyboard("keyboard"))
+    resp = urllib.request.urlopen(url)
+
 def send_to_admin(message):
     send_to_one(admin_id, message)
+
 
 def send_to_admin2(message):
     send_to_one(108186884, message)
@@ -128,5 +132,5 @@ def get_new_messages(server):
     return js
 
 if __name__ == "__main__":
-    for hundredPart in parts:
-        message_send(user_ids=hundredPart, message=hello, keyboard=keyboard)
+    send_keyboard(admin_id)
+    #send_to_all("Бот пока не работает. Скорее всего заработает через пару дней. Не надо писать мне в личку.")
