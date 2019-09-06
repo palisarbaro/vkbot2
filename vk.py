@@ -3,7 +3,7 @@ import urllib.request
 import top_secret
 from math import ceil
 import json
-
+import keyboard
 
 admin_id = 59544463
 group_id = 152709221
@@ -36,13 +36,11 @@ def send_to_one(user_id, message):
 def send_hello(user_id):
     send_to_one(user_id, hello_msg)
 
-def get_keyboard(fname):
-    with open(fname, 'r') as file:
-        kboard = file.read().replace('\n', '')
-    return kboard
+def get_keyboard():
+    return keyboard.keyboard.replace("\n","")
 
 def send_keyboard(user_id):
-    url = send_url + create_url(user_id=user_id,message="...",keyboard=get_keyboard("keyboard"))
+    url = send_url + create_url(user_id=user_id,message="...",keyboard=get_keyboard())
     resp = urllib.request.urlopen(url)
 
 def send_to_admin(message):
@@ -135,5 +133,5 @@ def get_new_messages(server):
     return js
 
 if __name__ == "__main__":
-    print(send_to_all("proverochka#4"))
+    print(get_keyboard())
 #send_to_all("Бот пока не работает. Скорее всего заработает через пару дней. Не надо писать мне в личку.")

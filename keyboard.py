@@ -1,3 +1,4 @@
+keyboard = """
 {
 	"buttons": [
 		[{
@@ -46,3 +47,4 @@
 	],
 	"one_time": false
 }
+"""
