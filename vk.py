@@ -12,7 +12,6 @@ token = top_secret.token
 version = "5.0"
 hello_msg = """get link3  - получить последнюю ссылку для 3 курса
 get week - верхняя или нижняя неделя
-get keyboard - получить кнопки
 """
 
 
@@ -55,27 +54,38 @@ def send_to_admin2(message):
 
 @debug
 def send_to_many(user_ids, message):
-    url = send_url + create_url(user_ids=user_ids,message=message)
+    url = send_url + create_url(user_ids=join_part(user_ids),message=message)
     resp = urllib.request.urlopen(url)
+    js = json.loads(resp.fp.read(resp.length).decode("utf-8"))
+    if "error" in js:
+        n = len(user_ids)
+        print(user_ids)
+        if n == 0 or n == 1:
+            return
+        u_ids1 = user_ids[0:n//2]
+        u_ids2 = user_ids[n//2:]
+        send_to_many(u_ids1,message)
+        send_to_many(u_ids2,message)
+
 
 
 def send_to_all(message):
-    parts = get_users_by_parts(99)
+    users = get_actual_users()
+    parts = split_users_by_N(users,99)
     for hundredPart in parts:
         send_to_many(hundredPart, message)
 
 
 def join_part(part):
-    return ",".join(part)
+    return ",".join(str(i) for i in part)
 
 
-def get_users_by_parts(N):
+def split_users_by_N(users,N):
     result = []
-    users = get_users()
     count_of_parts = ceil(len(users) / N)
     for i in range(count_of_parts):
         part = users[i * N:(i + 1) * N]
-        result.append(join_part(part))
+        result.append(part)
     return result
 
 def get_last_msg(user_id):
@@ -88,34 +98,27 @@ def get_last_msg(user_id):
 def get_id_by_msg(msg):
     return msg["from_id"] if msg["out"]==0 else msg["peer_id"]
 
-def get_users():
-    messages = get_last_messages()
-    list_of_users = []
-    for msg in messages:
-        user_id = get_id_by_msg(msg)
-        check_url = 'https://api.vk.com/method/messages.isMessagesFromGroupAllowed' + create_url(user_id=user_id, group_id=152709221)
-        check_resp = urllib.request.urlopen(check_url)
-        check_js = json.loads(check_resp.fp.read(check_resp.length).decode("utf-8"))
-        is_allowed = check_js['response']['is_allowed']
-        if is_allowed == 1:
-            list_of_users.append(str(user_id))
-    return list_of_users
-
-def get_last_messages():
+def get_actual_users():
     count = 10**10
     offset = 0
     dof = 150 # по сколько сообщений за раз. максимум 200(но лучше 199)
-    list_of_messages = []
+    actual_users = []
     while offset<count:
         url = 'https://api.vk.com/method/messages.getConversations' + create_url(offset=offset,count=dof)
         resp = urllib.request.urlopen(url)
         js = json.loads(resp.fp.read(resp.length).decode("utf-8"))
+        #print(js["response"]["items"])
         count = js["response"]["count"]
-        dialogs = js['response']['items']
-        for i in dialogs:
-            list_of_messages.append(i["last_message"])
+        items = js['response']['items']
+        for item in items:
+            item = item["conversation"]
+            try:
+                if item["can_write"]["allowed"]:
+                    actual_users.append(item["peer"]["id"])
+            except KeyError as e:
+                print(item,"has no ",e)
         offset+=dof
-    return list_of_messages
+    return actual_users
 
 
 def get_long_poll_server():
@@ -132,5 +135,5 @@ def get_new_messages(server):
     return js
 
 if __name__ == "__main__":
-    send_keyboard(admin_id)
-    #send_to_all("Бот пока не работает. Скорее всего заработает через пару дней. Не надо писать мне в личку.")
+    print(send_to_all("proverochka#4"))
+#send_to_all("Бот пока не работает. Скорее всего заработает через пару дней. Не надо писать мне в личку.")
