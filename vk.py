@@ -12,6 +12,7 @@ token = top_secret.token
 version = "5.0"
 hello_msg = """get link3  - получить последнюю ссылку для 3 курса
 get week - верхняя или нижняя неделя
+get keyboard - получить кнопки
 """
 
 
