@@ -10,4 +10,6 @@ jobs:
     steps:
 
       - name: wget
-        run: wget http://www.ipv6proxy.net/go.php?u=http%3A%2F%2F%5B2a00%3A1fa1%3Ac2b5%3Af804%3Ad2ea%3A9816%3A2790%3A4764%5D%3A8080%2F&b=0&f=norefer
+        run: |
+          wget -O kek.txt http://www.ipv6proxy.net/go.php?u=http%3A%2F%2F%5B2a00%3A1fa1%3Ac2b5%3Af804%3Ad2ea%3A9816%3A2790%3A4764%5D%3A8080%2F&b=0&f=norefer
+          echo kek.txt
