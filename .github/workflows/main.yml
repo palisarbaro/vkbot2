@@ -10,4 +10,4 @@ jobs:
     steps:
 
       - name: wget
-        run: wget https://[2a00:1fa1:c2b5:f804:d2ea:9816:2790:4764]:5000/
+        run: http://[2a00:1fa1:c2b5:f804:d2ea:9816:2790:4764]:8080/
