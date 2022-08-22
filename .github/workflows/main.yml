@@ -1,0 +1,13 @@
+
+name: CI
+
+on:  push
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: wget
+        run: wget https://[2a00:1fa1:c2b5:f804:d2ea:9816:2790:4764]:5000/
